@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>LET'S go OUT 💌</title>
+
+<style>
+body {
+  text-align: center;
+  font-family: Arial;
+  background: #ffe6e6;
+  margin-top: 100px;
+  overflow: hidden;
+  transition: 0.5s;
+}
+
+h1 { color: #ff4d6d; padding: 0 20px; }
+
+button {
+  padding: 12px 20px;
+  margin: 10px;
+  font-size: 16px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+}
+
+#btn1 { background: #28a745; color: white; }
+#btn2 { background: #dc3545; color: white; position: relative; }
+
+.heart {
+  position: absolute;
+  font-size: 24px;
+  animation: float 4s linear infinite;
+}
+
+@keyframes float {
+  0% { transform: translateY(0); opacity: 1; }
+  100% { transform: translateY(-600px); opacity: 0; }
+}
+</style>
+</head>
+
+<body>
+
+<h1 id="question">Will you go somewhere with me? 💖</h1>
+
+<button id="btn1">Yes 😍</button>
+<button id="btn2">Where? 🤨</button>
+
+<!-- 🎵 MUSIC -->
+<audio id="happy" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_d0e1f6c2a2.mp3?filename=romantic-piano-ambient-110397.mp3"></audio>
+
+<audio id="sad1" src="https://cdn.pixabay.com/download/audio/2022/03/10/audio_7b4c1f8c44.mp3?filename=lonely-piano-ambient-109592.mp3"></audio>
+
+<audio id="sad2" src="https://cdn.pixabay.com/download/audio/2022/01/18/audio_3c1f2d8a7d.mp3?filename=emotional-piano-112199.mp3"></audio>
+
+<audio id="sad3" src="https://cdn.pixabay.com/download/audio/2021/09/20/audio_7f2b6c8d1a.mp3?filename=sad-piano-music-112177.mp3"></audio>
+
+<audio id="sad4" src="https://cdn.pixabay.com/download/audio/2022/10/25/audio_7c3c9d2b5f.mp3?filename=emotional-piano-ambient-121244.mp3"></audio>
+
+<audio id="sad5" src="https://cdn.pixabay.com/download/audio/2022/03/22/audio_5b3d2f11.mp3?filename=dramatic-piano-112188.mp3"></audio>
+
+<script>
+let step = 0;
+
+const q = document.getElementById("question");
+const b1 = document.getElementById("btn1");
+const b2 = document.getElementById("btn2");
+
+const happy = document.getElementById("happy");
+
+const sadSounds = [
+  document.getElementById("sad1"),
+  document.getElementById("sad2"),
+  document.getElementById("sad3"),
+  document.getElementById("sad4"),
+  document.getElementById("sad5")
+];
+
+function stopAllAudio() {
+  [happy, ...sadSounds].forEach(a => {
+    if (!a) return;
+    a.pause();
+    a.currentTime = 0;
+  });
+}
+
+function playSad() {
+  stopAllAudio();
+  const sound = sadSounds[Math.min(step, sadSounds.length - 1)];
+  if (sound) sound.play().catch(() => {});
+}
+
+function playHappy() {
+  stopAllAudio();
+  happy.play().catch(() => {});
+}
+
+b1.onclick = () => handleChoice("yes");
+b2.onclick = () => handleChoice("no");
+
+function handleChoice(choice) {
+
+  if (choice === "yes") {
+    playHappy();
+    yay();
+    return;
+  }
+
+  if (choice === "no") playSad();
+
+  switch(step) {
+
+    case 0:
+      q.innerText = "It's a surprise 😏";
+      b1.innerText = "Okay 😌";
+      b2.innerText = "I want to know 😤";
+      step = 1;
+      break;
+
+    case 1:
+      q.innerText = "What you need to know is I am cute 😌";
+      b1.innerText = "Yes you are 🙂";
+      b2.innerText = "I just want to know about the place 😑";
+      step = 2;
+      break;
+
+    case 2:
+      q.innerText = "Do you not trust me? 😢";
+      b1.innerText = "Yes, I do 🥺";
+      b2.innerText = "Location please 😐";
+      step = 3;
+      break;
+
+    case 3:
+      q.innerText = "Come with me";
+      b1.innerText = "please 🥺";
+      b2.innerText = "No 😐";
+      step = 4;
+      break;
+
+    case 4:
+      q.innerText = "Why no? say 😢";
+      b1.innerText = "Pretty please 🥺";
+      b2.innerText = "No 😶";
+      step = 5;
+      break;
+
+    case 5:
+      q.innerText = "Why are you rejecting me? 💔";
+      b1.innerText = "okay, I will go 💖";
+      b2.innerText = "tell me the location, simple 💔";
+      step = 6;
+      break;
+
+    case 6:
+      q.innerText = "Ain't I your favourite? Say yes 😭 😏";
+      b1.innerText = "Yes 💕";
+      b2.innerText = "No 😈";
+      break;
+  }
+}
+
+function yay() {
+  // 🎯 remove BOTH buttons
+  b1.style.display = "none";
+  b2.style.display = "none";
+
+  q.innerText = "I knew you would say yes 😏";
+
+  setTimeout(() => {
+    q.innerText = "Yayyy! Get ready for tomorrow 😌💖";
+    document.body.style.background = "#fff0f5";
+    startHearts("❤️");
+  }, 1200);
+}
+
+b2.onmouseover = () => {
+  if (step === 6) {
+    b2.style.position = "absolute";
+    b2.style.left = Math.random() * window.innerWidth * 0.8 + "px";
+    b2.style.top = Math.random() * window.innerHeight * 0.6 + "px";
+  }
+};
+
+function startHearts(symbol) {
+  setInterval(() => {
+    let heart = document.createElement("div");
+    heart.className = "heart";
+    heart.innerHTML = symbol;
+    heart.style.left = Math.random() * window.innerWidth + "px";
+    heart.style.top = window.innerHeight + "px";
+    document.body.appendChild(heart);
+
+    setTimeout(() => heart.remove(), 4000);
+  }, 300);
+}
+</script>
+
+</body>
+</html>
